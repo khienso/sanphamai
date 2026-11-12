@@ -8,7 +8,7 @@ window.KHIENSO_CONFIG = {
   // Dán địa chỉ Cloudflare Worker vào giữa hai dấu ngoặc kép, ví dụ:
   //   CHAT_ENDPOINT: "https://khienso-chat.tenban.workers.dev",
   // Để trống "" thì cú An trả lời bằng 15 câu hỏi có sẵn.
-  CHAT_ENDPOINT: "",
+  CHAT_ENDPOINT: "https://khienso-chat.thu-anhpham58.workers.dev",
 
   // VIDEO (Bước 2)
   // Dán link YouTube vào youtube: "...". Video nào chưa có link sẽ tự ẩn.

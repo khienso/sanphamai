@@ -370,6 +370,7 @@ footer{padding-block:12px 40px; color:var(--ink-2); font-size:.85rem}
 .vframe{position:relative;width:100%;aspect-ratio:16/9;border-radius:var(--r-md);overflow:hidden;background:#000}
 .vframe.tall{aspect-ratio:9/16;width:100%;max-width:340px;margin:0 auto}
 .vframe iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vframe video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}
 .vcard h3{font-size:1.2rem}
 .vcard p{color:var(--ink-2);font-size:.94rem}
 </style>
@@ -711,7 +712,7 @@ function save(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){
 /* ---------- data ---------- */
 const CFG = window.KHIENSO_CONFIG || {};
 function ytId(u){ u = String(u || "").trim(); if (!u) return ""; const m = u.match(/(?:youtu\.be\/|[?&]v=|shorts\/|embed\/|live\/)([A-Za-z0-9_-]{11})/); return m ? m[1] : (/^[A-Za-z0-9_-]{11}$/.test(u) ? u : ""); }
-const VIDEOS = (Array.isArray(CFG.VIDEOS) ? CFG.VIDEOS : []).map(v => Object.assign({}, v, {id: ytId(v && v.youtube)})).filter(v => v.id);
+const VIDEOS = (Array.isArray(CFG.VIDEOS) ? CFG.VIDEOS : []).map(v => Object.assign({}, v, {id: ytId(v && v.youtube)})).filter(v => v.id || (v && v.file));
 const MODULES = [
   {id:"kien-thuc", n:1, t:"Học kiến thức", d:"Hiểu các nguy cơ trên mạng, dấu hiệu cảnh báo và cách tự bảo vệ.", img:"md1-kienthuc.webp", tag:"15 bài"},
   {id:"tinh-huong", n:2, t:"Tình huống mô phỏng", d:"Luyện cách phản ứng qua những đoạn tin nhắn giống thật.", img:"md2-tinhhuong.webp", tag:"15 tình huống"},
@@ -1198,7 +1199,9 @@ function renderVideos(){
   $("#vgrid").hidden = VIDEOS.length === 0;
   $("#vgrid").innerHTML = VIDEOS.map((v,i) => `
     <div class="card vcard">
-      <div class="vframe ${v.vertical ? 'tall' : ''}"><iframe src="https://www.youtube-nocookie.com/embed/${v.id}?rel=0" title="${esc(v.title || ('Video ' + (i+1)))}" loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
+      <div class="vframe ${v.vertical ? 'tall' : ''}">${v.file
+        ? `<video src="${esc(v.file)}"${v.poster ? ` poster="${esc(v.poster)}"` : ''} controls playsinline preload="metadata" controlslist="nodownload" title="${esc(v.title || ('Video ' + (i+1)))}"></video>`
+        : `<iframe src="https://www.youtube-nocookie.com/embed/${v.id}?rel=0" title="${esc(v.title || ('Video ' + (i+1)))}" loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`}</div>
       <div><span class="eyebrow">Video ${i+1}</span><h3>${esc(v.title || '')}</h3>${v.desc ? `<p>${esc(v.desc)}</p>` : ''}</div>
     </div>`).join("");
 }
